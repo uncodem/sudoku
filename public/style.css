@@ -103,11 +103,11 @@ body {
     aspect-ratio: 1;
 }
 
-.panel-input:hover {
+.panel-btn:hover {
     background: var(--color-panel-btn-hover);
 }
 
-.panel-input:active {
+.panel-btn:active {
     background: var(--color-panel-btn-active);
 }
 
