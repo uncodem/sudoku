@@ -1,0 +1,173 @@
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#sudoku-game {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    padding: 1rem;
+}
+
+#sudoku-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(90vw, 300px);
+}
+
+#panel-inputset {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.panel-btn {
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: #ddd;
+    transition: background-color 0.15s ease;
+}
+
+#notes-toggle {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.notes-mode {
+    background-color: #222;
+    color: white;
+}
+
+#notes-toggle:not(.notes-mode)::after {
+    content: " OFF";
+}
+
+#notes-toggle.notes-mode::after {
+    content: " ON";
+}
+
+.panel-input {
+    aspect-ratio: 1;
+}
+
+.panel-input:hover {
+    background: #dde3f5;
+}
+
+.panel-input:active {
+    background: #c7d0ee;
+}
+
+#erase-btn {
+    font-weight: normal;
+    grid-area: auto / 2;
+}
+
+@media (max-width: 640px) {
+    #sudoku-game {
+        flex-direction: column;
+        align-items: center;
+    }
+    .note {
+        font-size: 0.6rem;
+    }
+}
+
+#sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    aspect-ratio: 1;
+    border: 1px solid black;
+    width: min(90vw, 500px);
+    flex-shrink: 0;
+}
+
+.cell {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+
+    background-color: white;
+    border: 1px solid #ccc;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    min-width: 0;
+    min-height: 0;
+}
+
+.cell-value {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.cell:nth-child(9n+3),
+.cell:nth-child(9n+6) {
+    border-right: 2px solid #333;
+}
+
+.cell:nth-child(n+19):nth-child(-n+27),
+.cell:nth-child(n+46):nth-child(-n+54) {
+    border-bottom: 2px solid #333;
+}
+
+.cell.filled .cell-value {
+    font-weight: normal;
+}
+
+.cell.conflict .cell-value {
+    color: #c0392b;
+}
+
+.cell.filled:not(.given):not(.conflict) .cell-value {
+    color: #66C;
+}
+
+.cell.filled span.note,
+.cell.given span.note {
+    display: none;
+}
+
+.cell.empty span.cell-value {
+    display: none;
+}
+
+.cell.selected {
+    outline: 2px solid darkblue;
+    outline-offset: -2px;
+}
+
