@@ -210,5 +210,6 @@ body {
 
 .cell.selected {
     outline: 2px solid var(--color-cell-selected);
+    outline-offset: -2px;
 }
 
