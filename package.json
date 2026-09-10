@@ -11,9 +11,8 @@
     "typescript": "^5"
   },
   "scripts": {
-    "dev": "bun run --watch build.ts && bun x serve public",
     "build": "bun build src/main.ts --outdir public --minify && bun build worker.ts --outfile public/worker.js --minify",
-    "buildfront": "concurrently \"bun build src/main.ts --outdir public --minify --watch\" \"tsc --noEmit --watch\"",
+    "dev": "concurrently \"bun build src/main.ts --outdir public --watch\" \"bun build worker.ts --outfile public/worker.js --watch\" \"tsc --noEmit --watch\" \"bun x serve public\"",
     "typecheck": "tsc --noEmit"
   }
 }
