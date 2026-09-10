@@ -56,8 +56,8 @@ export function renderCell(i: number) {
     element.valueElement.textContent = state.value !== null ? String(state.value) : "";
 }
 
-export function renderBoard() {
-    const conflicts = getConflicts();
+export function renderBoard(conflicting: Set<number>|null = null) {
+    const conflicts = conflicting ? conflicting : getConflicts();
     for (let i = 0; i < 81; i++) {
         renderCell(i);
         const element = cellElements[i];
