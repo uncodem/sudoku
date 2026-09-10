@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "bun run --watch build.ts && bun x serve public",
-    "build": "bun build src/main.ts --outdir public --minify && bun build sw.ts --outfile public/sw.js --minify",
+    "build": "bun build src/main.ts --outdir public --minify && bun build worker.ts --outfile public/worker.js --minify",
     "buildfront": "concurrently \"bun build src/main.ts --outdir public --minify --watch\" \"tsc --noEmit --watch\"",
     "typecheck": "tsc --noEmit"
   }

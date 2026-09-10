@@ -3,16 +3,18 @@ import { board, loadBoard } from "./game";
 import { buildBoard, renderBoard, moveCursor, getCursor } from "./render";
 import { handleKeyDown, applyNumber, toggleMode, getMode, onModeChange, eraseCell } from "./vim";
 
-const samplePuzzle = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......";
-
+// const samplePuzzle = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......";
 const boardContainer = document.querySelector<HTMLElement>("#sudoku-board");
-
 if (!boardContainer) throw new Error("#sudoku-board not found in DOM");
 buildBoard(boardContainer, (row, col) => moveCursor(row, col));
 
-if (!loadBoard(samplePuzzle)) console.error("Failed to load puzzle: expected 81 characters");
-
-renderBoard();
+const worker = new Worker("/worker.js");
+worker.postMessage({ targetClues: 30 });
+worker.onmessage = (e) => {
+    loadBoard(e.data.puzzle);
+    renderBoard();
+};
+// if (!loadBoard(samplePuzzle)) console.error("Failed to load puzzle: expected 81 characters");
 
 document.addEventListener("keydown", handleKeyDown);
 

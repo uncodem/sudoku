@@ -25,7 +25,7 @@ function computePeers(i: number): number[] {
     return peers; // always exactly 20, no dupes, by construction
 }
 
-export const PEERS: readonly number[][] = Array.from(
+export const PEERS = Array.from(
     { length: 81 },
     (_, i) => Object.freeze(computePeers(i))
 );
@@ -125,6 +125,13 @@ export class Board {
         }
         ret += hline;
         return ret;
+    }
+
+    toPuzzleString(): string {
+        return Array.from({ length: 81 }, (_, i) => {
+            const v = this.data[i];
+            return v === 0 ? '.' : String(v);
+        }).join('');
     }
 
     static fromString(str: string): Board {
