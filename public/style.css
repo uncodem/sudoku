@@ -213,3 +213,17 @@ body {
     outline-offset: -2px;
 }
 
+h1 {
+    text-align: center;
+}
+
+#panel-otherset {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.other-input {
+    font-weight: normal;
+}
+
