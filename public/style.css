@@ -3,7 +3,47 @@
     box-sizing: border-box;
 }
 
+:root {
+    --color-bg: #ffffff;
+    --color-text: #222222;
+    --color-cell-bg: #ffffff;
+    --color-cell-border: #cccccc;
+    --color-cell-border-strong: #333333;
+    --color-cell-selected: darkblue;
+    --color-given-text: #222222;
+    --color-user-text: #6666cc;
+    --color-conflict-text: #c0392b;
+    --color-note-text: #666666;
+    --color-panel-btn-bg: #dddddd;
+    --color-panel-btn-hover: #dde3f5;
+    --color-panel-btn-active: #c7d0ee;
+    --color-notes-mode-bg: #222222;
+    --color-notes-mode-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #121212;
+        --color-text: #e8e8e8;
+        --color-cell-bg: #1e1e1e;
+        --color-cell-border: #444444;
+        --color-cell-border-strong: #888888;
+        --color-cell-selected: #6699ff;
+        --color-given-text: #e8e8e8;
+        --color-user-text: #99aaff;
+        --color-conflict-text: #ff6b5b;
+        --color-note-text: #999999;
+        --color-panel-btn-bg: #2a2a2a;
+        --color-panel-btn-hover: #3a3f55;
+        --color-panel-btn-active: #4a5170;
+        --color-notes-mode-bg: #e8e8e8;
+        --color-notes-mode-text: #121212;
+    }
+}
+
 body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
     font-family: Arial, sans-serif;
 }
 
@@ -36,7 +76,8 @@ body {
     font-size: 1.5rem;
     font-weight: 600;
     cursor: pointer;
-    background-color: #ddd;
+    color: var(--color-text);
+    background-color: var(--color-panel-btn-bg);
     transition: background-color 0.15s ease;
 }
 
@@ -46,8 +87,8 @@ body {
 }
 
 .notes-mode {
-    background-color: #222;
-    color: white;
+    background-color: var(--color-notes-mode-bg);
+    color: var(--color-notes-mode-text);
 }
 
 #notes-toggle:not(.notes-mode)::after {
@@ -63,11 +104,11 @@ body {
 }
 
 .panel-input:hover {
-    background: #dde3f5;
+    background: var(--color-panel-btn-hover);
 }
 
 .panel-input:active {
-    background: #c7d0ee;
+    background: var(--color-panel-btn-active);
 }
 
 #erase-btn {
@@ -102,8 +143,9 @@ body {
     font: inherit;
     cursor: pointer;
 
-    background-color: white;
-    border: 1px solid #ccc;
+    color: var(--color-text);
+    background-color: var(--color-cell-bg);
+    border: 1px solid var(--color-cell-border);
     position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -128,7 +170,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
-    color: #666;
+    color: var(--color-note-text);
     line-height: 1;
     min-width: 0;
     min-height: 0;
@@ -137,12 +179,12 @@ body {
 
 .cell:nth-child(9n+3),
 .cell:nth-child(9n+6) {
-    border-right: 2px solid #333;
+    border-right: 2px solid var(--color-cell-border-strong);
 }
 
 .cell:nth-child(n+19):nth-child(-n+27),
 .cell:nth-child(n+46):nth-child(-n+54) {
-    border-bottom: 2px solid #333;
+    border-bottom: 2px solid var(--color-cell-border-strong);
 }
 
 .cell.filled .cell-value {
@@ -150,11 +192,11 @@ body {
 }
 
 .cell.conflict .cell-value {
-    color: #c0392b;
+    color: var(--color-conflict-text);
 }
 
 .cell.filled:not(.given):not(.conflict) .cell-value {
-    color: #66C;
+    color: var(--color-user-text);
 }
 
 .cell.filled span.note,
@@ -167,7 +209,6 @@ body {
 }
 
 .cell.selected {
-    outline: 2px solid darkblue;
-    outline-offset: -2px;
+    outline: 2px solid var(--color-cell-selected);
 }
 
