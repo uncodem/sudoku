@@ -12,12 +12,21 @@ buildBoard(boardContainer, (row, col) => moveCursor(row, col));
 let solution: Board|null = null;
 
 const worker = new Worker("/worker.js");
-worker.postMessage({ targetClues: 30 });
+worker.postMessage({ command: "generate", targetClues: 30 });
 worker.onmessage = (e) => {
-    clearBoard();
-    loadBoard(e.data.puzzle);
-    solution = Board.fromString(e.data.solution);
-    renderBoard();
+    if (e.data.type === "generated") {
+        clearBoard();
+        loadBoard(e.data.puzzle);
+        solution = Board.fromString(e.data.solution);
+        renderBoard();
+    } else if (e.data.type === "solved") {
+        const propSolution = e.data.solution;
+        if (!propSolution) {
+            alert("Invalid board, no solution provided.");
+        } else {
+            solution = Board.fromString(propSolution);
+        }
+    }
 };
 // if (!loadBoard(samplePuzzle)) console.error("Failed to load puzzle: expected 81 characters");
 
@@ -77,7 +86,7 @@ document.querySelector("#generate-btn")?.addEventListener("click", () => {
     const clueInput = document.querySelector<HTMLInputElement>("#clue-count");
     const clue = Number(clueInput?.value ?? 30);
     clearBoard(true);
-    worker.postMessage({ targetClues: clue });
+    worker.postMessage({ command: "generate", targetClues: clue });
     dialog?.close();
 });
 
@@ -89,13 +98,14 @@ document.querySelector<HTMLButtonElement>("#load-btn")?.addEventListener("click"
     const stringInput = document.querySelector<HTMLInputElement>("#puzzle-string");
     const puzzleData = stringInput?.value.trim();
     if (puzzleData && puzzleData.length === 81) {
+        const oldSolution = solution;
+        solution = null;
+        worker.postMessage({command: "solve", puzzleStr: puzzleData});
+
         clearBoard(true);
         loadBoard(puzzleData);
         renderBoard();
         dialog?.close();
-
-        /* TODO: Make worker solve new puzzle string */
-        solution = null;
     } else {
         alert("Puzzle string must be exactly 81 characters.");
     }
