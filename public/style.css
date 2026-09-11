@@ -227,3 +227,16 @@ h1 {
     font-weight: normal;
 }
 
+dialog {
+    width: min(90vw, 400px);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    background: var(--color-cell-bg);
+    color: var(--color-text);
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+

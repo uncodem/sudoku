@@ -14,6 +14,7 @@ let solution: Board|null = null;
 const worker = new Worker("/worker.js");
 worker.postMessage({ targetClues: 30 });
 worker.onmessage = (e) => {
+    clearBoard();
     loadBoard(e.data.puzzle);
     solution = Board.fromString(e.data.solution);
     renderBoard();
@@ -67,5 +68,16 @@ const clearBtn = document.querySelector<HTMLButtonElement>("#clear-btn");
 clearBtn?.addEventListener("click", () => {
     clearBoard();
     renderBoard();
+});
+
+const dialog = document.querySelector<HTMLDialogElement>("#new-board-dialog");
+const openBtn = document.querySelector<HTMLButtonElement>("#new-board-btn");
+openBtn?.addEventListener("click", () => dialog?.showModal());
+document.querySelector("#generate-btn")?.addEventListener("click", () => {
+    const clueInput = document.querySelector<HTMLInputElement>("#clue-count");
+    const clue = Number(clueInput?.value ?? 30);
+    clearBoard(true);
+    worker.postMessage({ targetClues: clue });
+    dialog?.close();
 });
 
