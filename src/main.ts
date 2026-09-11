@@ -81,3 +81,7 @@ document.querySelector("#generate-btn")?.addEventListener("click", () => {
     dialog?.close();
 });
 
+document.querySelector<HTMLInputElement>("#dialog-cancel")?.addEventListener("click", () => {
+    dialog?.close();
+});
+
