@@ -76,6 +76,11 @@ export function getConflicts(): Set<number> {
     return conflicts;
 }
 
+export function clearBoard() {
+    for (let i = 0; i < 81; i++)
+        clearCell(i);
+}
+
 export function isSolved(): boolean {
     return board.every(cell => cell.value !== null) && getConflicts().size === 0;
 }

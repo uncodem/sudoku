@@ -1,5 +1,5 @@
 
-import { board, loadBoard } from "./game";
+import { board, loadBoard, clearBoard } from "./game";
 import { buildBoard, renderBoard, moveCursor, getCursor } from "./render";
 import { handleKeyDown, applyNumber, toggleMode, getMode, onModeChange, eraseCell } from "./vim";
 import { Board } from "./board";
@@ -61,5 +61,11 @@ scanBtn?.addEventListener("click", () => {
         if (current.value && current.value !== solved) wrongs.add(i);
     }
     renderBoard(wrongs);
+});
+
+const clearBtn = document.querySelector<HTMLButtonElement>("#clear-btn");
+clearBtn?.addEventListener("click", () => {
+    clearBoard();
+    renderBoard();
 });
 
