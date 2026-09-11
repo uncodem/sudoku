@@ -2,7 +2,7 @@
 import { board, loadBoard, clearBoard } from "./game";
 import { buildBoard, renderBoard, moveCursor, getCursor } from "./render";
 import { handleKeyDown, applyNumber, toggleMode, getMode, onModeChange, eraseCell } from "./vim";
-import { Board } from "./board";
+import { Board, hasConflict } from "./board";
 
 // const samplePuzzle = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......";
 const boardContainer = document.querySelector<HTMLElement>("#sudoku-board");
@@ -12,23 +12,45 @@ buildBoard(boardContainer, (row, col) => moveCursor(row, col));
 let solution: Board|null = null;
 
 const worker = new Worker("/worker.js");
-worker.postMessage({ command: "generate", targetClues: 30 });
+
+let resolveCurrent: ((data: any) => void) | null = null;
+let queueTail: Promise<void> = Promise.resolve();
+
 worker.onmessage = (e) => {
-    if (e.data.type === "generated") {
-        clearBoard();
-        loadBoard(e.data.puzzle);
-        solution = Board.fromString(e.data.solution);
-        renderBoard();
-    } else if (e.data.type === "solved") {
-        const propSolution = e.data.solution;
-        if (!propSolution) {
-            alert("Invalid board, no solution provided.");
-        } else {
-            solution = Board.fromString(propSolution);
-        }
-    }
-};
-// if (!loadBoard(samplePuzzle)) console.error("Failed to load puzzle: expected 81 characters");
+    resolveCurrent?.(e.data);
+    resolveCurrent = null;
+}
+
+function askWorker<T = any>(payload: Record<string, unknown>, timeoutMs = 10000): Promise<T> {
+    const result = queueTail.then(() => new Promise<T>((resolve, reject) => {
+        const timer = setTimeout(() => {
+            resolveCurrent = null;
+            reject(new Error("Worker timed out"));
+        }, timeoutMs);
+        resolveCurrent = (data) => {
+            clearTimeout(timer);
+            resolve(data);
+        };
+        worker.postMessage(payload);
+    }));
+    queueTail = result.then(() => {}, () => {});
+    return result;
+}
+
+async function generatePuzzle(targetClues: number) {
+    const data = await askWorker<{ puzzle: string; solution?: string }>({ command: "generate", targetClues });
+    clearBoard(true);
+    loadBoard(data.puzzle);
+    solution = data.solution ? Board.fromString(data.solution) : null;
+    renderBoard();
+}
+
+async function solvePuzzle(puzzleStr: string): Promise<Board | null> {
+    const data = await askWorker<{ solution: string | null }>({ command: "solve", puzzleStr });
+    return data.solution ? Board.fromString(data.solution) : null;
+}
+
+generatePuzzle(30);
 
 document.addEventListener("keydown", handleKeyDown);
 
@@ -86,28 +108,42 @@ document.querySelector("#generate-btn")?.addEventListener("click", () => {
     const clueInput = document.querySelector<HTMLInputElement>("#clue-count");
     const clue = Number(clueInput?.value ?? 30);
     clearBoard(true);
-    worker.postMessage({ command: "generate", targetClues: clue });
     dialog?.close();
+    generatePuzzle(clue);
 });
 
 document.querySelector<HTMLInputElement>("#dialog-cancel")?.addEventListener("click", () => {
     dialog?.close();
 });
 
-document.querySelector<HTMLButtonElement>("#load-btn")?.addEventListener("click", () => {
+const loadBtn = document.querySelector<HTMLButtonElement>("#load-btn");
+loadBtn?.addEventListener("click", async () => {
     const stringInput = document.querySelector<HTMLInputElement>("#puzzle-string");
     const puzzleData = stringInput?.value.trim();
-    if (puzzleData && puzzleData.length === 81) {
-        const oldSolution = solution;
-        solution = null;
-        worker.postMessage({command: "solve", puzzleStr: puzzleData});
+    if (!puzzleData || puzzleData.length !== 81) {
+        alert("Puzzle string must be exactly 81 characters.");
+        return;
+    }
 
+    if (hasConflict(puzzleData)) {
+        alert("Invalid board, no solution exists");
+        return;
+    }
+
+    loadBtn.disabled = true;
+    try {
+        const solved = await solvePuzzle(puzzleData);
+        if (!solved) {
+            alert("Invalid board, no solution exists.");
+            return; // nothing was touched, no rollback needed
+        }
+        solution = solved;
         clearBoard(true);
         loadBoard(puzzleData);
         renderBoard();
         dialog?.close();
-    } else {
-        alert("Puzzle string must be exactly 81 characters.");
+    } finally {
+        loadBtn.disabled = false;
     }
 });
 

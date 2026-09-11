@@ -25,6 +25,25 @@ function computePeers(i: number): number[] {
     return peers; // always exactly 20, no dupes, by construction
 }
 
+export function hasConflict(puzzleStr: string|number[]): boolean {
+    const rows: Set<string|number>[] = Array.from({ length: 9 }, () => new Set());
+    const cols: Set<string|number>[] = Array.from({ length: 9 }, () => new Set());
+    const boxes: Set<string|number>[] = Array.from({ length: 9 }, () => new Set());
+
+    for (let i = 0; i < 81; i++) {
+        const ch: string|number = puzzleStr[i];
+        if (ch === "." || ch === "0" || ch == 0) continue;
+        const row = Math.floor(i / 9);
+        const col = i % 9;
+        const box = Math.floor(row / 3) * 3 + Math.floor(col / 3);
+        if (rows[row].has(ch) || cols[col].has(ch) || boxes[box].has(ch)) return true;
+        rows[row].add(ch);
+        cols[col].add(ch);
+        boxes[box].add(ch);
+    }
+    return false;
+}
+
 export const PEERS = Array.from(
     { length: 81 },
     (_, i) => Object.freeze(computePeers(i))
@@ -39,6 +58,9 @@ export class Board {
         if (cells) {
             if (cells.length !== 81) {
                 throw new Error(`expected 81 cells got ${cells.length}`);
+            }
+            if (hasConflict(cells)) {
+                throw new Error("conflicting values: duplicate value in a row, column, or box");
             }
             this.data = [...cells];
             this.computeCandidates();
@@ -134,7 +156,8 @@ export class Board {
         }).join('');
     }
 
-    static fromString(str: string): Board {
+    static fromString(str: string): Board|null {
+        if (hasConflict(str)) return null;
         const cells = str.split('').map(c => (c === '.' ? 0 : Number(c)));
         return new Board(cells);
     }
