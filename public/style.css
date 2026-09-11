@@ -83,7 +83,7 @@ body {
 
 #notes-toggle {
     font-size: 1.2rem;
-    font-weight: normal;
+    font-weight: 600;
 }
 
 .notes-mode {
@@ -97,6 +97,11 @@ body {
 
 #notes-toggle.notes-mode::after {
     content: " ON";
+}
+
+#solve-btn {
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .panel-input {
@@ -124,6 +129,11 @@ body {
     .note {
         font-size: 0.6rem;
     }
+
+    #notes-toggle {order: 1;}
+    #panel-inputset {order: 2;}
+    #solve-btn {order: 3;}
+    #panel-otherset {order: 4;}
 }
 
 #sudoku-board {
