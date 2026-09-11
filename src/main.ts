@@ -1,5 +1,5 @@
 
-import { board, loadBoard, clearBoard } from "./game";
+import { board, loadBoard, clearBoard, setCellValue } from "./game";
 import { buildBoard, renderBoard, moveCursor, getCursor } from "./render";
 import { handleKeyDown, applyNumber, toggleMode, getMode, onModeChange, eraseCell } from "./vim";
 import { Board, hasConflict } from "./board";
@@ -145,5 +145,16 @@ loadBtn?.addEventListener("click", async () => {
     } finally {
         loadBtn.disabled = false;
     }
+});
+
+const solveBtn = document.querySelector<HTMLButtonElement>("#solve-btn");
+solveBtn?.addEventListener("click", () => {
+    if (solution === null) return;
+    for (let i = 0; i < 81; i++) {
+        if (board[i].given) continue;
+        setCellValue(i, solution.getCell(i));
+        board[i].given = true;
+    }
+    renderBoard();
 });
 
