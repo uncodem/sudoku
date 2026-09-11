@@ -11,7 +11,7 @@ buildBoard(boardContainer, (row, col) => moveCursor(row, col));
 
 let solution: Board|null = null;
 
-const worker = new Worker("/worker.js");
+const worker = new Worker("./worker.js");
 
 let resolveCurrent: ((data: any) => void) | null = null;
 let queueTail: Promise<void> = Promise.resolve();
