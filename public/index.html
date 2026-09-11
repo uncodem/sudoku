@@ -9,13 +9,19 @@
     <body>
         <h1>Sudoku</h1>
         <dialog id="new-board-dialog">
-            <h2>New Puzzle</h2>
-            <label>
-                Clues: <input type="number" id="clue-count" min="17" max="81" value="30">
-            </label>
-            <div class="dialog-actions">
-                <button id="generate-btn">Generate</button>
-                <button id="dialog-cancel" formmethod="dialog">Cancel</button>
+            <div id="dialog-content">
+                <h2>New Puzzle</h2>
+                <label>
+                    Clues: <input class="dialog-input" type="number" id="clue-count" min="17" max="81" value="30">
+                </label>
+                <label>
+                    Load String: <input type="text" id="puzzle-string" class="dialog-input" placeholder="81 chars..." maxlength="81" minlength="81">
+                </label>
+                <div id="dialog-actions">
+                    <button class="panel-btn" id="load-btn">Load</button>
+                    <button class="panel-btn" id="generate-btn">Generate</button>
+                    <button class="panel-btn" id="dialog-cancel" formmethod="dialog">Cancel</button>
+                </div>
             </div>
         </dialog>
         <div id="sudoku-game">

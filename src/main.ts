@@ -85,3 +85,19 @@ document.querySelector<HTMLInputElement>("#dialog-cancel")?.addEventListener("cl
     dialog?.close();
 });
 
+document.querySelector<HTMLButtonElement>("#load-btn")?.addEventListener("click", () => {
+    const stringInput = document.querySelector<HTMLInputElement>("#puzzle-string");
+    const puzzleData = stringInput?.value.trim();
+    if (puzzleData && puzzleData.length === 81) {
+        clearBoard(true);
+        loadBoard(puzzleData);
+        renderBoard();
+        dialog?.close();
+
+        /* TODO: Make worker solve new puzzle string */
+        solution = null;
+    } else {
+        alert("Puzzle string must be exactly 81 characters.");
+    }
+});
+
