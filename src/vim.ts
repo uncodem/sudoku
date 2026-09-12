@@ -1,6 +1,7 @@
 
 import { getCursor, moveCursor, renderBoard } from "./render";
 import { setCellValue, toggleNote, clearCell } from "./game";
+import { isPaused } from "./timer";
 
 enum Mode {
     Place = "place",
@@ -52,6 +53,7 @@ function resolveNumber(key: string): number | null {
 export function handleKeyDown(e: KeyboardEvent) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (document.querySelector("dialog[open]")) return;
+    if (isPaused()) return;
     const {row, col} = getCursor();
     const i = row * 9 + col;
     if (e.key in navMap) {

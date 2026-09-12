@@ -123,6 +123,16 @@ body {
     grid-area: auto / 2;
 }
 
+#timer-btn {
+    grid-area: auto / 3;
+    font-variant-numeric: tabular-nums;
+}
+
+#timer-btn.paused {
+    background-color: var(--color-notes-mode-bg);
+    color: var(--color-notes-mode-text);
+}
+
 @media (max-width: 640px) {
     #sudoku-game {
         flex-direction: column;
@@ -230,6 +240,11 @@ body {
 
 .cell.peer {
     background-color: var(--color-peer-bg);
+}
+
+.cell.board-hidden .cell-value,
+.cell.board-hidden .note {
+    visibility: hidden;
 }
 
 h1 {

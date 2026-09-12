@@ -7,6 +7,10 @@ export const cellElements: CellElement[] = [];
 let cursor = {row: 0, col: 0};
 export function getCursor() { return {...cursor}; }
 
+type RenderListener = () => void;
+let renderListeners: RenderListener[] = [];
+export function onRender(fn: RenderListener) { renderListeners.push(fn); }
+
 export function buildBoard(container: HTMLElement, onCellClick: (row: number, col: number) => void) {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -75,4 +79,11 @@ export function renderBoard(conflicting: Set<number>|null = null) {
         if (element) element.root.classList.toggle("conflict", conflicts.has(i));
     }
     moveCursor(cursor.row, cursor.col);
+    renderListeners.forEach(fn => fn());
 }
+
+export function setBoardHidden(hidden: boolean) {
+    for (const el of cellElements)
+        el.root.classList.toggle("board-hidden", hidden);
+}
+

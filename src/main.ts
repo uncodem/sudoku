@@ -1,13 +1,17 @@
 
-import { board, loadBoard, clearBoard, setCellValue } from "./game";
-import { buildBoard, renderBoard, moveCursor, getCursor } from "./render";
+import { board, loadBoard, clearBoard, setCellValue, isSolved } from "./game";
+import { buildBoard, renderBoard, moveCursor, getCursor, onRender } from "./render";
 import { handleKeyDown, applyNumber, toggleMode, getMode, onModeChange, eraseCell } from "./vim";
 import { Board, hasConflict } from "./board";
+import { resetTimer, stopTimer, togglePause, isPaused, onPauseChange } from "./timer";
 
 // const samplePuzzle = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......";
 const boardContainer = document.querySelector<HTMLElement>("#sudoku-board");
 if (!boardContainer) throw new Error("#sudoku-board not found in DOM");
-buildBoard(boardContainer, (row, col) => moveCursor(row, col));
+buildBoard(boardContainer, (row, col) => {
+    if (isPaused()) return;
+    moveCursor(row, col);
+});
 
 let solution: Board|null = null;
 
@@ -41,6 +45,7 @@ async function generatePuzzle(targetClues: number) {
     const data = await askWorker<{ puzzle: string; solution?: string }>({ command: "generate", targetClues });
     clearBoard(true);
     loadBoard(data.puzzle);
+    resetTimer();
     solution = data.solution ? Board.fromString(data.solution) : null;
     renderBoard();
 }
@@ -57,6 +62,7 @@ document.addEventListener("keydown", handleKeyDown);
 document.querySelectorAll<HTMLButtonElement>('.panel-input').forEach((btn, idx) => {
     if (idx < 9) {
         btn.addEventListener("click", () => {
+            if (isPaused()) return;
             const { row, col } = getCursor();
             applyNumber(row * 9 + col, idx + 1);
             btn.blur();
@@ -85,7 +91,7 @@ onModeChange((mode) => {
 
 const scanBtn = document.querySelector<HTMLButtonElement>("#scan-btn");
 scanBtn?.addEventListener("click", () => {
-    if (!solution) return;
+    if (isPaused() || !solution) return;
     const wrongs = new Set<number>();
     for (let i = 0; i < 81; i++) {
         const current = board[i];
@@ -97,6 +103,7 @@ scanBtn?.addEventListener("click", () => {
 
 const clearBtn = document.querySelector<HTMLButtonElement>("#clear-btn");
 clearBtn?.addEventListener("click", () => {
+    if (isPaused()) return;
     clearBoard();
     renderBoard();
 });
@@ -140,6 +147,7 @@ loadBtn?.addEventListener("click", async () => {
         solution = solved;
         clearBoard(true);
         loadBoard(puzzleData);
+        resetTimer();
         renderBoard();
         dialog?.close();
     } finally {
@@ -149,7 +157,7 @@ loadBtn?.addEventListener("click", async () => {
 
 const solveBtn = document.querySelector<HTMLButtonElement>("#solve-btn");
 solveBtn?.addEventListener("click", () => {
-    if (solution === null) return;
+    if (isPaused() || solution === null) return;
     for (let i = 0; i < 81; i++) {
         if (board[i].given) continue;
         setCellValue(i, solution.getCell(i));
@@ -157,4 +165,18 @@ solveBtn?.addEventListener("click", () => {
     }
     renderBoard();
 });
+
+const timerBtn = document.querySelector<HTMLButtonElement>("#timer-btn");
+timerBtn?.addEventListener("click", () => {
+    togglePause();
+    timerBtn.blur();
+})
+
+onPauseChange((paused) => {
+    timerBtn?.classList.toggle("paused", paused);
+});
+
+onRender(() => {
+    if (isSolved()) stopTimer();
+})
 
