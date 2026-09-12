@@ -23,6 +23,8 @@ export function setCellValue(i: number, value: number) {
     if (!board[i] || board[i].given) return;
     board[i].value = value;
     board[i].notes.clear();
+    for (const p of peerCache[i])
+        board[p]?.notes.delete(value);
 }
 
 export function toggleNote(i: number, n: number) {
