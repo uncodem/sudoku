@@ -1,5 +1,5 @@
 
-import { board, getConflicts } from "./game";
+import { board, getConflicts, getPeers } from "./game";
 
 import type { CellState, CellElement } from "./types";
 
@@ -37,10 +37,21 @@ export function buildBoard(container: HTMLElement, onCellClick: (row: number, co
     }
 }
 
+function updatePeerHighlight(i: number) {
+    for (const el of cellElements) el.root.classList.remove("peer");
+    for (const p of getPeers(i)) {
+        cellElements[p]?.root.classList.add("peer");
+    }
+}
+
 export function moveCursor(ny: number, nx: number) {
-    cellElements[cursor.row * 9 + cursor.col]!.root.classList.remove("selected");
+    const oldIndx = cursor.row * 9 + cursor.col;
+    const newIndx = ny * 9 + nx;
+
+    cellElements[oldIndx]?.root.classList.remove("selected");
     cursor = {row: ny, col: nx};
-    cellElements[ny * 9 + nx]!.root.classList.add("selected");
+    cellElements[newIndx]!.root.classList.add("selected");
+    updatePeerHighlight(newIndx);
 }
 
 export function renderCell(i: number) {

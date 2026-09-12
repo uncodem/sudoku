@@ -19,6 +19,7 @@
     --color-panel-btn-active: #c7d0ee;
     --color-notes-mode-bg: #222222;
     --color-notes-mode-text: #ffffff;
+    --color-peer-bg: #eef1fa;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,6 +39,7 @@
         --color-panel-btn-active: #4a5170;
         --color-notes-mode-bg: #e8e8e8;
         --color-notes-mode-text: #121212;
+        --color-peer-bg: #2a2f45;
     }
 }
 
@@ -126,9 +128,12 @@ body {
         flex-direction: column;
         align-items: center;
     }
+
     .note {
         font-size: 0.6rem;
     }
+
+    .panel-btn:hover {}
 
     #notes-toggle {order: 1;}
     #panel-inputset {order: 2;}
@@ -221,6 +226,10 @@ body {
 .cell.selected {
     outline: 2px solid var(--color-cell-selected);
     outline-offset: -2px;
+}
+
+.cell.peer {
+    background-color: var(--color-peer-bg);
 }
 
 h1 {

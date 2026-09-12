@@ -60,6 +60,10 @@ function cellPeers(i: number): number[] {
 
 const peerCache: number[][] = Array.from({ length: 81 }, (_, i) => cellPeers(i));
 
+export function getPeers(i: number): number[] {
+    return peerCache[i];
+}
+
 export function getConflicts(): Set<number> {
     const conflicts = new Set<number>();
     for (let i = 0; i < 81; i++) {
