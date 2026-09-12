@@ -110,10 +110,6 @@ body {
     aspect-ratio: 1;
 }
 
-.panel-btn:hover {
-    background: var(--color-panel-btn-hover);
-}
-
 .panel-btn:active {
     background: var(--color-panel-btn-active);
 }
@@ -133,6 +129,12 @@ body {
     color: var(--color-notes-mode-text);
 }
 
+@media (hover: hover) and (pointer: fine) {
+    .panel-btn:hover {
+        background: var(--color-panel-btn-hover);
+    }
+}
+
 @media (max-width: 640px) {
     #sudoku-game {
         flex-direction: column;
@@ -142,8 +144,6 @@ body {
     .note {
         font-size: 0.6rem;
     }
-
-    .panel-btn:hover {}
 
     #notes-toggle {order: 1;}
     #panel-inputset {order: 2;}
