@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "sudoku-v2";
+const CACHE_NAME = "sudoku-v3";
 
 const PRECACHE_URLS = [
     "./",
