@@ -13,6 +13,8 @@ A simple PWA that lets you play sudoku offline or online. Features VIM-style bin
 | a,s,d         | 4,5,6 respectively    |
 | z,x,c         | 7,8,9 respectively    |
 
+### Live version available [here](https://uncodem.github.io/sudoku)
+
 To install dependencies:
 
 ```bash
