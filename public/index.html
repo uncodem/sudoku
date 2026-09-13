@@ -19,6 +19,15 @@
                 <label>
                     Load String: <input type="text" id="puzzle-string" class="dialog-input" placeholder="81 chars..." maxlength="81" minlength="81">
                 </label>
+                <div id="bank-controls">
+                    <select id="bank-difficulty" class="dialog-input">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="diabolical">Diabolical</option>
+                    </select>
+                    <button class="panel-btn" id="random-btn" type="button">Random</button>
+                </div>
                 <div id="dialog-actions">
                     <button class="panel-btn" id="load-btn">Load</button>
                     <button class="panel-btn" id="generate-btn">Generate</button>

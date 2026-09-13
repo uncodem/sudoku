@@ -4,6 +4,7 @@ import { buildBoard, renderBoard, moveCursor, getCursor, onRender } from "./rend
 import { handleKeyDown, applyNumber, toggleMode, getMode, onModeChange, eraseCell } from "./vim";
 import { Board, hasConflict } from "./board";
 import { resetTimer, stopTimer, togglePause, isPaused, onPauseChange } from "./timer";
+import { getRandomPuzzle, type Tier } from "./puzzlebank";
 
 // const samplePuzzle = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......";
 const boardContainer = document.querySelector<HTMLElement>("#sudoku-board");
@@ -178,5 +179,23 @@ onPauseChange((paused) => {
 
 onRender(() => {
     if (isSolved()) stopTimer();
+})
+
+const randomBtn = document.querySelector<HTMLButtonElement>("#random-btn");
+const difficultySelect = document.querySelector<HTMLSelectElement>("#bank-difficulty");
+const puzzleStringInput = document.querySelector<HTMLInputElement>("#puzzle-string");
+
+randomBtn?.addEventListener("click", async () => {
+    const tier = (difficultySelect?.value ?? "medium") as Tier;
+    randomBtn.disabled = true;
+    try {
+        const puzzle = await getRandomPuzzle(tier);
+        if (puzzleStringInput) puzzleStringInput.value = puzzle;
+    } catch (err) {
+        console.error("Failed to load puzzle bank: ", err);
+        alert("Could not load puzzle bank. Try again.");
+    } finally {
+        randomBtn.disabled = false;
+    }
 })
 

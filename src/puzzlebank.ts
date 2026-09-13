@@ -1,6 +1,6 @@
 
 const TIERS = ['easy', 'medium', 'hard', 'diabolical'] as const;
-type Tier = typeof TIERS[number];
+export type Tier = typeof TIERS[number];
 
 const cache: Partial<Record<Tier, Uint8Array>> = {};
 
