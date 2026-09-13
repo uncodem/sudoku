@@ -1,7 +1,7 @@
 
-import { generatePuzzle } from "./src/generator";
-import { searchSolution } from "./src/solver";
-import { Board } from "./src/board";
+import { generatePuzzle } from "./generator";
+import { searchSolution } from "./solver";
+import { Board } from "./board";
 
 self.onmessage = (e) => {
     const { command, targetClues, puzzleStr } = e.data;
@@ -11,8 +11,10 @@ self.onmessage = (e) => {
         self.postMessage({ type: "generated", puzzle: puzzle.toPuzzleString(), solution: solution?.toPuzzleString() });
     } else if (command === "solve" && puzzleStr) {
         const current = Board.fromString(puzzleStr);
-        const solution = searchSolution(current);
-        self.postMessage({ type: "solved", solution: solution ? solution.toPuzzleString() : null });
+        if (current) {
+            const solution: Board|null = searchSolution(current);
+            self.postMessage({ type: "solved", solution: solution ? solution.toPuzzleString() : null });
+        }
     }
 }
 
