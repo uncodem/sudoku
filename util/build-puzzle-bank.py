@@ -35,7 +35,7 @@ def main():
                 out.write(pack_puzzle(puzzle_str))
                 count += 1
 
-            size_kb = os.path.getsize(outpath)
+            size_kb = os.path.getsize(out_path)
             print(f"{tier}: wrote {count} puzzles -> {out_path} ({size_kb:.1f} KB)")
 
 if __name__=="__main__": main()
