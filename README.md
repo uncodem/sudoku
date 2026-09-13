@@ -15,6 +15,8 @@ A simple PWA that lets you play sudoku offline or online. Features VIM-style bin
 
 ### Live version available [here](https://uncodem.github.io/sudoku)
 
+Puzzle bank sourced from the [sudoku exchange puzzle bank](https://sudokuexchange.com/puzzle-bank/)
+
 To install dependencies:
 
 ```bash
