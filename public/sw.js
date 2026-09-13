@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "sudoku-v3.5";
+const CACHE_NAME = "sudoku-v4";
 
 const PRECACHE_URLS = [
     "./",
@@ -12,6 +12,10 @@ const PRECACHE_URLS = [
     "./icons/icon-192.png",
     "./icons/icon-512.png",
     "./icons/icon-512-maskable.png",
+    "./easy.bin",
+    "./medium.bin",
+    "./hard.bin",
+    "./diabolical.bin",
 ];
 
 self.addEventListener("install", (event) => {
