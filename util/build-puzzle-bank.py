@@ -3,7 +3,7 @@
 import os
 
 SRC_DIR = "raw"
-OUT_DIR = "public_data"
+OUT_DIR = "public"
 
 TIERS = ["easy", "medium", "hard", "diabolical"]
 
