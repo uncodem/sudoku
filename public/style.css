@@ -66,6 +66,17 @@ body {
     width: min(90vw, 300px);
 }
 
+#credits {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-note-text);
+    padding: 1.5rem 1rem;
+}
+
+#credits a {
+    color: inherit;
+}
+
 #panel-inputset {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
