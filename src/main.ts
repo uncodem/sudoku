@@ -7,6 +7,7 @@ import { resetTimer, stopTimer, togglePause, isPaused, onPauseChange } from "./t
 import { getRandomPuzzle, type Tier } from "./puzzlebank";
 
 // const samplePuzzle = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......";
+const boardPanel = document.querySelector<HTMLElement>("#board-panel");
 const boardContainer = document.querySelector<HTMLElement>("#sudoku-board");
 if (!boardContainer) throw new Error("#sudoku-board not found in DOM");
 buildBoard(boardContainer, (row, col) => {
@@ -48,6 +49,7 @@ async function generatePuzzle(targetClues: number) {
     loadBoard(data.puzzle);
     resetTimer();
     solution = data.solution ? Board.fromString(data.solution) : null;
+    boardPanel?.classList.toggle("solved", false);
     renderBoard();
 }
 
@@ -68,8 +70,9 @@ document.querySelectorAll<HTMLButtonElement>('.panel-input').forEach((btn, idx) 
             applyNumber(row * 9 + col, idx + 1);
             btn.blur();
         });
-    } else {
+    } else if (idx === 9) {
         btn.addEventListener("click", () => {
+            if (isPaused()) return;
             const {row, col} = getCursor();
             eraseCell(row * 9 + col);
             btn.blur();
@@ -183,7 +186,10 @@ onPauseChange((paused) => {
 });
 
 onRender(() => {
-    if (isSolved()) stopTimer();
+    if (isSolved()) {
+        stopTimer();
+        boardPanel?.classList.toggle("solved", true);
+    }
 })
 
 const randomBtn = document.querySelector<HTMLButtonElement>("#random-btn");

@@ -223,7 +223,7 @@ body {
     height: fit-content;
 }
 
-#board-panel.paused #pause-indicator {
+#board-panel.paused:not(.solved) #pause-indicator {
     visibility: visible;
 }
 
