@@ -14,7 +14,7 @@ let running = false;
 export function isPaused() { return paused || !running; }
 
 function updateDisplay() {
-    const el = document.querySelector<HTMLElement>("#timer-btn");
+    const el = document.querySelector<HTMLElement>("#timer-label");
     if (!el) return;
     const elapsedMs = paused ? accumulatedMs : accumulatedMs + (Date.now() - startTime);
     const totalSec = Math.floor(elapsedMs / 1000);

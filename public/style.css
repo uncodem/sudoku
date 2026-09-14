@@ -121,9 +121,28 @@ body {
 }
 
 #timer-btn {
+    position: relative;
     grid-area: auto / 3;
     font-variant-numeric: tabular-nums;
 }
+
+#timer-icon {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 14px;
+    height: 14px;
+}
+
+#timer-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+#icon-play { display: none; }
+#timer-btn.paused #icon-pause { display: none; }
+#timer-btn.paused #icon-play { display: inline; }
 
 #timer-btn.paused {
     background-color: var(--color-notes-mode-bg);

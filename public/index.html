@@ -61,7 +61,13 @@
                     <button class="panel-btn panel-input">8</button>
                     <button class="panel-btn panel-input">9</button>
                     <button id="erase-btn" class="panel-btn panel-input">Erase</button>
-                    <button id="timer-btn" class="panel-btn panel-input">0:00</button>
+                    <button id="timer-btn" class="panel-btn panel-input">
+                        <span id="timer-icon" aria-hidden="true">
+                            <svg id="icon-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                            <svg id="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+                        </span>
+                        <span id="timer-label">0:00</span>
+                    </button>
                 </div>
             </div>
         </div>
