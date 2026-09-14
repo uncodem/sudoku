@@ -176,6 +176,8 @@ body {
         font-size: 0.6rem;
     }
 
+    h1 { display: none; }
+
     #notes-toggle {order: 1;}
     #panel-inputset {order: 2;}
     #solve-btn {order: 3;}
