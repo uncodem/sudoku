@@ -173,8 +173,13 @@ timerBtn?.addEventListener("click", () => {
     timerBtn.blur();
 })
 
+document.querySelector("#pause-indicator")?.addEventListener("click", () => {
+    togglePause();
+});
+
 onPauseChange((paused) => {
     timerBtn?.classList.toggle("paused", paused);
+    boardContainer.classList.toggle("paused", isPaused());
 });
 
 onRender(() => {
