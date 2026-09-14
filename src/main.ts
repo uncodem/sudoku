@@ -179,7 +179,7 @@ document.querySelector("#pause-indicator")?.addEventListener("click", () => {
 
 onPauseChange((paused) => {
     timerBtn?.classList.toggle("paused", paused);
-    boardContainer.classList.toggle("paused", isPaused());
+    document.querySelector("#board-panel")?.classList.toggle("paused", isPaused());
 });
 
 onRender(() => {
